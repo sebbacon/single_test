@@ -81,6 +81,7 @@ module SingleTest
   def run_test(type, file, test_name=nil)
     case type.to_s
     when 'test' then Rake.sh "ruby -Ilib:test #{file} -n /#{test_name}/"
+    when 'stest' then Rake.sh "testrb -Itest #{file} -n /#{test_name}/"
     when 'spec' then
       executable = spec_executable
       options_file = "spec/spec.opts"
