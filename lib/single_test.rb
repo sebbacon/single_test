@@ -3,7 +3,7 @@ require 'rake'
 module SingleTest
   extend self
 
-  CMD_LINE_MATCHER = /^(spec|test)\:.*(\:.*)?$/
+  CMD_LINE_MATCHER = /^(spec|test|stest)\:.*(\:.*)?$/
 
   def load_tasks
     load File.join(File.dirname(__FILE__), 'tasks', 'single_test.rake')
@@ -21,6 +21,7 @@ module SingleTest
   end
 
   def all_tests(type)
+    type = "test" if type == "stest"
     FileList["#{type}/**/*_#{type}.rb"].reject{|file|File.directory?(file)}
   end
 
@@ -81,7 +82,7 @@ module SingleTest
   def run_test(type, file, test_name=nil)
     case type.to_s
     when 'test' then Rake.sh "ruby -Ilib:test #{file} -n /#{test_name}/"
-    when 'stest' then Rake.sh "testrb -Itest #{file} -n /#{test_name}/"
+    when 'stest' then Rake.sh "testdrb -Itest #{file} -n /#{test_name}/"
     when 'spec' then
       executable = spec_executable
       options_file = "spec/spec.opts"
